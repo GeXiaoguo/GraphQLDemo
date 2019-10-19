@@ -16,8 +16,8 @@ namespace ConsoleApp1
         public string Name { get; set; }
     }
 
-    [GraphQLMetadata("Droid", IsTypeOf = typeof(Droid))]
-    public class DroidType
+    [GraphQLMetadata("Droid", IsTypeOf = typeof(DroidResolvers))]
+    public class DroidResolvers
     {
         public string Id(Droid droid) => droid.Id;
         public string Name(Droid droid) => droid.Name + "fake";
@@ -60,6 +60,11 @@ namespace ConsoleApp1
         const string _schema = @"type Droid {
                                       id: ID!
                                       name: String!
+                                      friend: Character
+                                    }
+
+                                    type Character {
+                                      name: String!
                                     }
 
                                     type Query {
@@ -70,9 +75,11 @@ namespace ConsoleApp1
         {
             var schema = Schema.For(_schema, schemaBuilder =>
             {
-                schemaBuilder.Types.Include<QueryResolvers>();
                 schemaBuilder.Types.Include<Droid>();
-                schemaBuilder.Types.Include<DroidType>();
+                schemaBuilder.Types.Include<Character>();
+
+                schemaBuilder.Types.Include<QueryResolvers>();
+                schemaBuilder.Types.Include<DroidResolvers>();
             });
 
             var json = schema.Execute(executionOptions =>
@@ -82,7 +89,7 @@ namespace ConsoleApp1
 
             json = schema.Execute(executionOptions =>
             {
-                executionOptions.Query = $"{{ getDroids {{ id name }} }}";
+                executionOptions.Query = $"{{ getDroids {{ id name friend {{name}} }} }}";
             });
             Console.WriteLine(json);
         }
