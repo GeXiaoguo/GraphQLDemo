@@ -14,10 +14,11 @@ namespace ConsoleApp1
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public DateTime Birthday { get; set; }// not defined in the schema. Not queryable by the client.
     }
 
-    [GraphQLMetadata("Droid", IsTypeOf = typeof(DroidResolvers))]
-    public class DroidResolvers
+    [GraphQLMetadata("Droid", IsTypeOf = typeof(DroidFieldResolvers))]
+    public class DroidFieldResolvers
     {
         public string Id(Droid droid) => droid.Id;
         public string Name(Droid droid) => droid.Name + "fake";
@@ -26,7 +27,7 @@ namespace ConsoleApp1
         // ResolveFieldContext provides contextual information about the field
         public Character Friend(ResolveFieldContext context, Droid source)
         {
-            return new Character { Name = "C3-PO" };
+            return new Character { Name = $"C3-PO. {this.Name(source)}  is my friend" };
         }
     }
 
@@ -79,7 +80,7 @@ namespace ConsoleApp1
                 schemaBuilder.Types.Include<Character>();
 
                 schemaBuilder.Types.Include<QueryResolvers>();
-                schemaBuilder.Types.Include<DroidResolvers>();
+                schemaBuilder.Types.Include<DroidFieldResolvers>();
             });
 
             var json = schema.Execute(executionOptions =>
