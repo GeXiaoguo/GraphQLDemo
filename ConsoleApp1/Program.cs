@@ -34,8 +34,8 @@ namespace ConsoleApp1
 
     public class QueryResolvers
     {
-        [GraphQLMetadata("droid")]
-        public Droid droid(string id)
+        [GraphQLMetadata("getDroid")]
+        public Droid GetDroid(string id)
         {
             return new[]
             {
@@ -45,8 +45,8 @@ namespace ConsoleApp1
             .FirstOrDefault(x => x.Id == id);
         }
 
-        [GraphQLMetadata("droids")]
-        public IEnumerable<Droid> droids()
+        [GraphQLMetadata("getDroids")]
+        public IEnumerable<Droid> GetDroids()
         {
             return new[]
             {
@@ -63,8 +63,8 @@ namespace ConsoleApp1
                                     }
 
                                     type Query {
-                                      droid(id: ID): Droid
-                                      droids: [Droid]
+                                      getDroid(id: ID): Droid
+                                      getDroids: [Droid]
                                     }";
         static void Main(string[] args)
         {
@@ -77,12 +77,12 @@ namespace ConsoleApp1
 
             var json = schema.Execute(executionOptions =>
             {
-                executionOptions.Query = $"{{ droid(id: \"123\") {{ id name }} }}";
+                executionOptions.Query = $"{{ getDroid(id: \"123\") {{ id name }} }}";
             });
 
             json = schema.Execute(executionOptions =>
             {
-                executionOptions.Query = $"{{ droids {{ id name }} }}";
+                executionOptions.Query = $"{{ getDroids {{ id name }} }}";
             });
             Console.WriteLine(json);
         }
