@@ -30,7 +30,9 @@ namespace ConsoleApp1
         }
     }
 
-    public class Query
+    [GraphQLMetadata("Query", IsTypeOf = typeof(QueryResolvers))]
+
+    public class QueryResolvers
     {
         [GraphQLMetadata("droid")]
         public Droid droid(string id)
@@ -68,7 +70,7 @@ namespace ConsoleApp1
         {
             var schema = Schema.For(_schema, schemaBuilder =>
             {
-                schemaBuilder.Types.Include<Query>();
+                schemaBuilder.Types.Include<QueryResolvers>();
                 schemaBuilder.Types.Include<Droid>();
                 schemaBuilder.Types.Include<DroidType>();
             });
