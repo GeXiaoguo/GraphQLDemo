@@ -10,7 +10,7 @@ namespace ConsoleApp1
     {
         public string Name { get; set; }
     }
-    public class DTDroid
+    public class Droid
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -19,8 +19,8 @@ namespace ConsoleApp1
     [GraphQLMetadata("Droid", IsTypeOf = typeof(Droid))]
     public class DroidType
     {
-        public string Id(DTDroid droid) => droid.Id;
-        public string Name(DTDroid droid) => droid.Name + "fake";
+        public string Id(Droid droid) => droid.Id;
+        public string Name(Droid droid) => droid.Name + "fake";
 
         // these two parameters are optional
         // ResolveFieldContext provides contextual information about the field
@@ -30,36 +30,26 @@ namespace ConsoleApp1
         }
     }
 
-    public class Droid
-    {
-        //todo, how to define field resolvers
-        [GraphQLMetadata("name")]
-        public string droid(DTDroid droid)
-        {
-            return droid.Name + "fake";
-        }
-    }
-
     public class Query
     {
         [GraphQLMetadata("droid")]
-        public DTDroid droid(string id)
+        public Droid droid(string id)
         {
             return new[]
             {
-                new DTDroid { Id = "123", Name = "R2-D2" },
-                new DTDroid { Id = "456", Name = "R3-D3" }
+                new Droid { Id = "123", Name = "R2-D2" },
+                new Droid { Id = "456", Name = "R3-D3" }
             }
             .FirstOrDefault(x => x.Id == id);
         }
 
         [GraphQLMetadata("droids")]
-        public IEnumerable<DTDroid> droids()
+        public IEnumerable<Droid> droids()
         {
             return new[]
             {
-                new DTDroid { Id = "123", Name = "R2-D2" },
-                new DTDroid { Id = "456", Name = "R3-D3" }
+                new Droid { Id = "123", Name = "R2-D2" },
+                new Droid { Id = "456", Name = "R3-D3" }
             };
         }
     }
@@ -79,7 +69,7 @@ namespace ConsoleApp1
             var schema = Schema.For(_schema, schemaBuilder =>
             {
                 schemaBuilder.Types.Include<Query>();
-                schemaBuilder.Types.Include<DTDroid>();
+                schemaBuilder.Types.Include<Droid>();
                 schemaBuilder.Types.Include<DroidType>();
             });
 
