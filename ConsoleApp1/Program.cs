@@ -8,7 +8,7 @@ namespace ConsoleApp1
 {
     public class Character
     {
-        public string Name { get; set; }
+        public string Name { get; set; } // no explicit resolvers defined for this field. Default to the property of the poco class itself.
     }
     public class Droid
     {
@@ -20,8 +20,8 @@ namespace ConsoleApp1
     [GraphQLMetadata("Droid", IsTypeOf = typeof(DroidFieldResolvers))]
     public class DroidFieldResolvers
     {
-        public string Id(Droid droid) => droid.Id;
-        public string Name(Droid droid) => droid.Name + "fake";
+        public string Id(Droid droid) => droid.Id; // this resolver returns the poco class property. It is the default behavior already. No need to define this resolver. 
+        public string Name(Droid droid) => droid.Name + "fake"; // this resolver returns a computer value different than the poco property.
 
         // these two parameters are optional
         // ResolveFieldContext provides contextual information about the field
