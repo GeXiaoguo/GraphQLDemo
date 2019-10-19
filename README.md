@@ -3,7 +3,7 @@ A GraphQL.Net demo with easier to understand class names
 
 To understand how GraphQL works, I highly recommend reading this tutorial <https://blog.apollographql.com/graphql-explained-5844742f195e> first. This example duplicates the example presented here: https://graphql-dotnet.github.io/docs/getting-started/introduction and changed the class names to better match the concept presented in the first toturial.
 
-```
+```cs
     public class Character
     {
         // no explicit resolvers defined for this field. Default to the property of the poco class itself.
